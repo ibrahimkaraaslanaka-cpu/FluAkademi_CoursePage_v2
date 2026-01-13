@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Poppins, Montserrat } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/context/ThemeContext";
 
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
+});
+
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
+  subsets: ["latin"],
+  weight: ["900"],
 });
 
 export const metadata: Metadata = {
@@ -20,9 +27,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="tr">
-      <body className={`${poppins.variable} antialiased bg-[#0a0a0a] text-[#ededed]`}>
-        {children}
+    <html lang="tr" data-theme="dark" suppressHydrationWarning>
+      <body className={`${poppins.variable} ${montserrat.variable} antialiased bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)] transition-colors duration-300`}>
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Menu, X, User, BookOpen, Sparkles } from "lucide-react";
+import { Menu, X, User, BookOpen, Sparkles, Sun, Moon } from "lucide-react";
 import Link from "next/link";
+import { useTheme } from "@/context/ThemeContext";
 
 const navItems = [
     { name: "Akademi", href: "#akademi", color: "#FFBC0B" },
@@ -16,6 +17,8 @@ export default function FloatingHeader() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [hoveredNav, setHoveredNav] = useState<string | null>(null);
+    const { theme, toggleTheme } = useTheme();
+    const isDark = theme === 'dark';
 
     const { scrollY } = useScroll();
     const headerOpacity = useTransform(scrollY, [0, 100], [0, 1]);
@@ -39,15 +42,15 @@ export default function FloatingHeader() {
                     className="rounded-2xl px-6 py-3 flex items-center justify-between transition-all duration-300"
                     style={{
                         background: isScrolled
-                            ? "rgba(10, 10, 10, 0.85)"
-                            : "rgba(255, 255, 255, 0.05)",
+                            ? "rgba(5, 17, 30, 0.95)"
+                            : "rgba(5, 17, 30, 0.9)",
                         backdropFilter: isScrolled ? "blur(20px)" : "blur(10px)",
                         border: isScrolled
                             ? "1px solid rgba(255, 255, 255, 0.1)"
                             : "1px solid rgba(255, 255, 255, 0.05)",
                         boxShadow: isScrolled
                             ? "0 8px 32px rgba(0, 0, 0, 0.4)"
-                            : "none",
+                            : "0 4px 20px rgba(0, 0, 0, 0.2)",
                     }}
                 >
                     {/* Logo */}
@@ -60,10 +63,10 @@ export default function FloatingHeader() {
                             <span className="relative text-black font-bold text-xl">F</span>
                         </motion.div>
                         <div className="hidden sm:block">
-                            <div className="font-bold text-white text-lg leading-tight">
+                            <div className="font-bold text-lg leading-tight text-white">
                                 Flu
                             </div>
-                            <div className="text-[10px] text-gray-400 -mt-1 tracking-widest">
+                            <div className="text-[10px] -mt-1 tracking-widest text-gray-400">
                                 AKADEMİ
                             </div>
                         </div>
@@ -75,7 +78,7 @@ export default function FloatingHeader() {
                             <motion.a
                                 key={item.name}
                                 href={item.href}
-                                className="relative px-4 py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors"
+                                className="relative px-4 py-2 text-sm font-medium transition-colors text-gray-300 hover:text-white"
                                 onHoverStart={() => setHoveredNav(item.name)}
                                 onHoverEnd={() => setHoveredNav(null)}
                             >
@@ -104,7 +107,7 @@ export default function FloatingHeader() {
                         <motion.button
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
-                            className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors"
+                            className="px-4 py-2 text-sm font-medium transition-colors text-gray-300 hover:text-white"
                         >
                             Giriş Yap
                         </motion.button>
@@ -116,6 +119,27 @@ export default function FloatingHeader() {
                             <Sparkles size={14} className="group-hover:animate-pulse" />
                             Başla
                         </motion.button>
+
+                        {/* Theme Toggle Switch */}
+                        <button
+                            onClick={toggleTheme}
+                            className="relative"
+                            aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
+                        >
+                            <div className="relative w-14 h-7 rounded-full transition-colors duration-300 bg-[#1a2744]">
+                                <motion.div
+                                    className="absolute top-0.5 w-6 h-6 rounded-full shadow-lg flex items-center justify-center bg-[#0a1628]"
+                                    animate={{ left: isDark ? 'calc(100% - 26px)' : '2px' }}
+                                    transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                                >
+                                    {isDark ? (
+                                        <Moon size={14} className="text-[#FFBC0B]" />
+                                    ) : (
+                                        <Sun size={14} className="text-[#FFBC0B]" />
+                                    )}
+                                </motion.div>
+                            </div>
+                        </button>
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -137,7 +161,7 @@ export default function FloatingHeader() {
                     }}
                     className="md:hidden mt-2 rounded-2xl overflow-hidden"
                     style={{
-                        background: "rgba(10, 10, 10, 0.95)",
+                        background: "rgba(5, 17, 30, 0.95)",
                         backdropFilter: "blur(20px)",
                         border: "1px solid rgba(255, 255, 255, 0.1)",
                     }}
@@ -147,7 +171,7 @@ export default function FloatingHeader() {
                             <a
                                 key={item.name}
                                 href={item.href}
-                                className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-colors"
+                                className="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors text-gray-300 hover:text-white"
                                 style={{ background: `${item.color}10` }}
                                 onClick={() => setIsMenuOpen(false)}
                             >
@@ -158,7 +182,7 @@ export default function FloatingHeader() {
                                 {item.name}
                             </a>
                         ))}
-                        <hr className="border-white/10 my-3" />
+                        <hr className="my-3 border-white/10" />
                         <button className="w-full px-4 py-3 text-center text-black font-semibold bg-gradient-to-r from-[#FFBC0B] to-[#FFA500] rounded-xl">
                             Hemen Başla
                         </button>

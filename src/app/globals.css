@@ -5,21 +5,73 @@
    ======================================== */
 
 :root {
-  /* Brand Colors */
+  /* Brand Colors - Always available */
   --flu-yellow: #FFBC0B;
   --flu-yellow-dark: #E5A800;
   --flu-purple: #5E55FF;
-  
-  /* Dark Theme Colors */
-  --background: #0a0a0a;
-  --background-secondary: #111111;
-  --background-card: #1a1a1a;
-  --foreground: #ededed;
-  --foreground-muted: #888888;
-  --border: #262626;
-  
-  /* Accent Colors */
-  --accent-red: #FF4757;
+  --flu-deep-purple: #240A49;
+  --flu-dark-red: #8E2A4A;
+  --flu-bright-red: #F74A4A;
+  --flu-light-pink: #FFEFEF;
+  --flu-dark-navy: #05111E;
+}
+
+/* ========================================
+   DARK THEME (Default)
+   ======================================== */
+:root,
+html[data-theme="dark"] {
+  --theme-bg-primary: #05111E;
+  --theme-bg-secondary: #0d1a2d;
+  --theme-bg-card: rgba(255, 255, 255, 0.05);
+  --theme-bg-card-solid: #0f1f33;
+  --theme-text-primary: #FFFFFF;
+  --theme-text-secondary: #9CA3AF;
+  --theme-text-muted: #6B7280;
+  --theme-border: rgba(255, 255, 255, 0.1);
+  --theme-accent: var(--flu-yellow);
+  --theme-accent-text: #000000;
+  --theme-link: var(--flu-purple);
+  --theme-button-secondary-bg: rgba(255, 255, 255, 0.1);
+  --theme-button-secondary-hover: rgba(255, 255, 255, 0.2);
+
+  /* Legacy compatibility */
+  --background: #05111E;
+  --background-secondary: #0d1a2d;
+  --background-card: #0f1f33;
+  --foreground: #FFFFFF;
+  --foreground-muted: #9CA3AF;
+  --border: rgba(255, 255, 255, 0.1);
+  --accent-red: #F74A4A;
+  --accent-green: #2ED573;
+}
+
+/* ========================================
+   LIGHT THEME (Flu Yellow)
+   ======================================== */
+html[data-theme="light"] {
+  --theme-bg-primary: #FFBC0B;
+  --theme-bg-secondary: #FFD54F;
+  --theme-bg-card: rgba(255, 239, 239, 0.95);
+  --theme-bg-card-solid: #FFEFEF;
+  --theme-text-primary: #05111E;
+  --theme-text-secondary: #1a2a3a;
+  --theme-text-muted: #3a4a5a;
+  --theme-border: rgba(5, 17, 30, 0.15);
+  --theme-accent: #05111E;
+  --theme-accent-text: #FFFFFF;
+  --theme-link: #05111E;
+  --theme-button-secondary-bg: rgba(5, 17, 30, 0.1);
+  --theme-button-secondary-hover: rgba(5, 17, 30, 0.2);
+
+  /* Legacy compatibility */
+  --background: #FFBC0B;
+  --background-secondary: #FFD54F;
+  --background-card: #FFEFEF;
+  --foreground: #05111E;
+  --foreground-muted: #1a2a3a;
+  --border: rgba(5, 17, 30, 0.15);
+  --accent-red: #8E2A4A;
   --accent-green: #2ED573;
 }
 
@@ -62,6 +114,62 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* Dark Mode - Red accent text becomes yellow */
+html[data-theme="dark"] .text-\[\#F74A4A\] {
+  color: #FFBC0B !important;
+}
+
+/* Category Badge - Consistent sizing across both modes */
+html[data-theme="light"] .category-badge {
+  background: #F74A4A !important;
+  color: #FFFFFF !important;
+  padding: 0.625rem 1.25rem !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  border-radius: 1rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  height: auto !important;
+}
+
+html[data-theme="dark"] .category-badge {
+  background: #FFBC0B !important;
+  color: #000000 !important;
+  padding: 0.625rem 1.25rem !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  border-radius: 1rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  height: auto !important;
+}
+
+/* Light Mode - Red Section Background */
+html[data-theme="light"] .light-mode-red-section {
+  background: #8E2A4A !important;
+  color: #FFFFFF;
+}
+
+html[data-theme="light"] .light-mode-red-section>div>h2 {
+  color: #FFFFFF;
+}
+
+html[data-theme="light"] .light-mode-red-section .text-\[\#F74A4A\] {
+  color: #FFBC0B !important;
+}
+
+/* Cards inside red section should have black text */
+html[data-theme="light"] .light-mode-red-section .group h3,
+html[data-theme="light"] .light-mode-red-section .group p,
+html[data-theme="light"] .light-mode-red-section .group span.text-\[var\(--theme-text-primary\)\] {
+  color: #05111E !important;
+}
+
+html[data-theme="light"] .light-mode-red-section .group span.text-\[var\(--theme-text-secondary\)\],
+html[data-theme="light"] .light-mode-red-section .group p.text-\[var\(--theme-text-secondary\)\] {
+  color: #3a4a5a !important;
 }
 
 /* Card Hover Effect */
@@ -133,8 +241,15 @@ body {
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-fade-in {
@@ -142,8 +257,15 @@ body {
 }
 
 @keyframes slideIn {
-  from { opacity: 0; transform: translateX(-20px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .animate-slide-in {
