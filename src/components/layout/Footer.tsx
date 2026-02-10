@@ -2,22 +2,22 @@
 
 import Link from "next/link";
 import { Instagram, Twitter, Youtube, Linkedin, Mail } from "lucide-react";
+import { useTheme } from "@/context/ThemeContext";
 
 const footerLinks = {
     platform: [
-        { name: "Flu Akademi", href: "/akademi" },
-        { name: "Dijital Akademi", href: "/dijital" },
+        { name: "Flu Akademi", href: "/egitimler" },
         { name: "Etkinlikler", href: "/etkinlikler" },
         { name: "Danışmanlık", href: "/danismanlik" },
+        { name: "Eğitmenler", href: "/egitmenler" },
     ],
     company: [
         { name: "Hakkımızda", href: "/hakkimizda" },
-        { name: "Eğitmenler", href: "/egitmenler" },
         { name: "Blog", href: "/blog" },
         { name: "İletişim", href: "/iletisim" },
+        { name: "SSS", href: "/sss" },
     ],
     legal: [
-        { name: "Kullanım Koşulları", href: "/kosullar" },
         { name: "Gizlilik Politikası", href: "/gizlilik" },
         { name: "KVKK", href: "/kvkk" },
     ],
@@ -31,8 +31,14 @@ const socialLinks = [
 ];
 
 export default function Footer() {
+    const { theme } = useTheme();
+    const isDark = theme === "dark";
+
     return (
-        <footer className="bg-[#0a0a0a] border-t border-[#262626]">
+        <footer className={`border-t ${isDark
+            ? 'bg-[#030b14] border-white/[0.06]'
+            : 'bg-[#1a1a1a] border-[#333]'
+            }`}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
                     {/* Brand */}
@@ -44,7 +50,7 @@ export default function Footer() {
                             <span className="font-bold text-white text-xl">Flu Akademi</span>
                         </Link>
                         <p className="text-gray-400 mb-6 max-w-sm">
-                            Türkiye'nin premium online eğitim platformu. Bilgi ve becerilerinizi
+                            Türkiye&apos;nin premium online eğitim platformu. Bilgi ve becerilerinizi
                             geliştirin, kariyerinizi dönüştürün.
                         </p>
                         {/* Social Links */}
@@ -55,7 +61,7 @@ export default function Footer() {
                                     href={social.href}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="w-10 h-10 rounded-full bg-[#1a1a1a] flex items-center justify-center text-gray-400 hover:bg-[#FFBC0B] hover:text-black transition-all"
+                                    className="w-10 h-10 rounded-full bg-white/[0.06] flex items-center justify-center text-gray-400 hover:bg-[#FFBC0B] hover:text-black transition-all"
                                 >
                                     <social.icon size={18} />
                                 </a>
@@ -116,7 +122,7 @@ export default function Footer() {
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="mt-12 pt-8 border-t border-[#262626] flex flex-col md:flex-row justify-between items-center gap-4">
+                <div className="mt-12 pt-8 border-t border-white/[0.06] flex flex-col md:flex-row justify-between items-center gap-4">
                     <p className="text-gray-500 text-sm">
                         © 2024 Flu Akademi. Tüm hakları saklıdır.
                     </p>

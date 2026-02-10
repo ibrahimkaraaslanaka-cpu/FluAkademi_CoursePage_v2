@@ -23,7 +23,7 @@ export default function Header() {
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2">
                         <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center">
-                            <span className="text-white font-bold text-xl">F</span>
+                            <img src="/images/flu-logo.svg" alt="Flu Akademi" className="w-6 h-6 object-contain" />
                         </div>
                         <span className="font-bold text-black text-lg hidden sm:block">
                             Flu Akademi
@@ -37,8 +37,8 @@ export default function Header() {
                                 key={item.name}
                                 onClick={() => setActiveTab(item.name)}
                                 className={`px-4 py-5 text-sm font-medium transition-all ${activeTab === item.name
-                                        ? "text-[#FFBC0B] border-b-2 border-[#FFBC0B]"
-                                        : "text-gray-600 hover:text-black border-b-2 border-transparent"
+                                    ? "text-[#FFBC0B] border-b-2 border-[#FFBC0B]"
+                                    : "text-gray-600 hover:text-black border-b-2 border-transparent"
                                     }`}
                             >
                                 {item.name}

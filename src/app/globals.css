@@ -52,17 +52,18 @@ html[data-theme="dark"] {
 html[data-theme="light"] {
   --theme-bg-primary: #FFBC0B;
   --theme-bg-secondary: #FFD54F;
-  --theme-bg-card: rgba(255, 239, 239, 0.95);
-  --theme-bg-card-solid: #FFEFEF;
+  --theme-bg-tertiary: #f5f0e0;
+  --theme-bg-card: rgba(255, 255, 255, 0.92);
+  --theme-bg-card-solid: #FFFFFF;
   --theme-text-primary: #05111E;
   --theme-text-secondary: #1a2a3a;
   --theme-text-muted: #3a4a5a;
-  --theme-border: rgba(5, 17, 30, 0.15);
+  --theme-border: rgba(5, 17, 30, 0.12);
   --theme-accent: #05111E;
   --theme-accent-text: #FFFFFF;
   --theme-link: #05111E;
-  --theme-button-secondary-bg: rgba(5, 17, 30, 0.1);
-  --theme-button-secondary-hover: rgba(5, 17, 30, 0.2);
+  --theme-button-secondary-bg: rgba(5, 17, 30, 0.08);
+  --theme-button-secondary-hover: rgba(5, 17, 30, 0.15);
 
   /* Legacy compatibility */
   --background: #FFBC0B;

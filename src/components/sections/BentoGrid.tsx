@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BookOpen, Laptop, Calendar, Users, ArrowRight, ChevronRight } from "lucide-react";
+import { useTheme } from "@/context/ThemeContext";
 
 const sections = [
     {
@@ -70,9 +71,11 @@ const sections = [
 export default function BentoGrid() {
     const [hoveredId, setHoveredId] = useState<string | null>(null);
     const [activeSection, setActiveSection] = useState<string | null>(null);
+    const { theme } = useTheme();
+    const isDark = theme === "dark";
 
     return (
-        <section className="relative py-24 bg-[#0a0a0a] overflow-hidden">
+        <section className="relative py-24 bg-[var(--theme-bg-primary)] overflow-hidden">
             {/* Background Gradient */}
             <div className="absolute inset-0 pointer-events-none">
                 <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#FFBC0B]/5 rounded-full blur-3xl" />
@@ -90,18 +93,21 @@ export default function BentoGrid() {
                     <motion.span
                         initial={{ opacity: 0, scale: 0.9 }}
                         whileInView={{ opacity: 1, scale: 1 }}
-                        className="inline-block px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-gray-400 mb-6"
+                        className={`inline-block px-4 py-2 rounded-full text-sm mb-6 ${isDark
+                            ? 'bg-white/5 border border-white/10 text-gray-400'
+                            : 'bg-black/5 border border-black/10 text-[var(--theme-text-muted)]'
+                            }`}
                     >
                         ✨ Öğrenme Deneyiminizi Seçin
                     </motion.span>
-                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--theme-text-primary)] mb-6">
                         Dört Farklı Yol,
                         <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FFBC0B] via-[#FF6B6B] to-[#A855F7]">
                             Sonsuz Olasılık
                         </span>
                     </h2>
-                    <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+                    <p className="text-xl text-[var(--theme-text-muted)] max-w-2xl mx-auto">
                         Entelektüel derinlikten dijital becerilere, canlı etkinliklerden birebir mentorluğa
                     </p>
                 </motion.div>
@@ -139,8 +145,8 @@ export default function BentoGrid() {
                                         className="absolute inset-0 transition-all duration-500"
                                         style={{
                                             background: isHovered
-                                                ? `linear-gradient(135deg, ${section.color}90 0%, #0a0a0aF0 100%)`
-                                                : `linear-gradient(135deg, #0a0a0aE0 0%, #0a0a0aF0 100%)`,
+                                                ? `linear-gradient(135deg, ${section.color}90 0%, rgba(5,17,30,0.94) 100%)`
+                                                : `linear-gradient(135deg, rgba(5,17,30,0.88) 0%, rgba(5,17,30,0.94) 100%)`,
                                         }}
                                     />
                                 </div>
@@ -190,7 +196,7 @@ export default function BentoGrid() {
                                                 initial={{ opacity: 0, height: 0 }}
                                                 animate={{ opacity: 1, height: "auto" }}
                                                 exit={{ opacity: 0, height: 0 }}
-                                                className="text-gray-400 text-sm mb-4 line-clamp-3"
+                                                className="text-gray-300 text-sm mb-4 line-clamp-3"
                                             >
                                                 {section.description}
                                             </motion.p>
@@ -208,7 +214,7 @@ export default function BentoGrid() {
                                                     >
                                                         {stat.value}
                                                     </div>
-                                                    <div className="text-xs text-gray-500">{stat.label}</div>
+                                                    <div className="text-xs text-gray-400">{stat.label}</div>
                                                 </div>
                                             ))}
                                         </div>

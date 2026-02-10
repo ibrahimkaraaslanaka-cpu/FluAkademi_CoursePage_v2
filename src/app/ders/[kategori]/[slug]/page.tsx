@@ -5,100 +5,34 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import FloatingHeader from "@/components/layout/FloatingHeader";
 import Footer from "@/components/layout/Footer";
-import { ShoppingCart, Play, Clock, Users, Star, ChevronDown, ArrowRight, Tag, Sparkles, BadgePercent } from "lucide-react";
+import { ShoppingCart, Play, Clock, Users, Star, ChevronDown, ArrowRight, Tag, Sparkles, BadgePercent, Gift, Columns, Lightbulb, Zap, Wine, CheckCircle, BookOpen, Brain, Package } from "lucide-react";
 import Link from "next/link";
-
-// Demo course data
-const courseData = {
-    id: "tanrilarin-evrimi",
-    category: "Mitoloji",
-    title: "Tanrıların Evrimi",
-    lessonNumber: 2,
-    currentLesson: 2,
-    seriesLessons: [
-        { number: 1, title: "Mitolojiye Giriş", slug: "mitolojiye-giris" },
-        { number: 2, title: "Tanrıların Evrimi", slug: "tanrilarin-evrimi" },
-    ],
-    tagline: "İnsanlığın en eski hikayesinin izinde",
-    description: "Tanrıların evrimini takip etmek, aslında insanlığın kendi evrimini takip etmektir.",
-    price: 1575,
-    originalPrice: 1750,
-    discount: 10,
-    duration: "12+ Saat",
-    students: 2847,
-    rating: 4.9,
-    instructor: {
-        name: "Nevzat Kaya",
-        title: "Mitoloji & Kültür Tarihçisi",
-        quote: "Tanrıları anlamak, insanı anlamaktır.",
-    },
-    chapters: [
-        { id: 1, title: "Kutsalın Metamorfozları", duration: "1s 45dk", description: "Tanrı kavramının kökenlerini, ilkel toplumlardaki kutsal anlayışını ve bunun nasıl evrildiğini inceliyoruz." },
-        { id: 2, title: "Titanlar ve Olimpikler", duration: "1s 30dk", description: "Yunan mitolojisindeki iki büyük tanrı kuşağı arasındaki çatışmayı ve bunun kültürel anlamlarını keşfediyoruz." },
-        { id: 3, title: "Demeter - Afrodit - Artemis", duration: "1s 20dk", description: "Dişil kutsalın Yunan mitolojisindeki temsilcilerini ve toplumsal cinsiyet rollerini inceliyoruz." },
-        { id: 4, title: "Olimpik İdeoloji", duration: "1s 35dk", description: "Olimpos panteonunun nasıl bir siyasi ve toplumsal düzen yansıttığını analiz ediyoruz." },
-        { id: 5, title: "Olimpizmin Bilinçdışı", duration: "1s 25dk", description: "Olimpik düzenin bastırdığı arkaik unsurları ve bunların psikolojik boyutlarını ele alıyoruz." },
-        { id: 6, title: "Eksen Çağı ve Apollonizmin Doğuşu", duration: "1s 40dk", description: "M.Ö. 800-200 arasındaki düşünce devrimini ve Apollo kültünün yükselişini inceliyoruz." },
-        { id: 7, title: "Dionysos'un Bastırılışı", duration: "1s 15dk", description: "Ekstaz ve kaos tanrısı Dionysos'un Apollonik düzen tarafından nasıl marjinalleştirildiğini keşfediyoruz." },
-        { id: 8, title: "Tanrının Ölümü ve Tragedyanın Doğuşu", duration: "1s 50dk", description: "Mitolojik düşüncenin çöküşünü ve bunun sanata, özellikle tragedyaya nasıl yansıdığını inceliyoruz." },
-    ],
-    insights: [
-        "Neden tüm mitolojilerde 'eski' ve 'yeni' tanrılar var?",
-        "Olimpos'un gerçek anlamı ne?",
-        "Dionysos neden bastırıldı?",
-    ],
-    testimonials: [
-        { id: 1, name: "Ahmet Yılmaz", text: "Mitolojiye bakış açım tamamen değişti. Artık filmleri, kitapları farklı okuyorum.", rating: 5, date: "2 hafta önce" },
-        { id: 2, name: "Elif Kara", text: "Nevzat Hoca'nın anlatım tarzı muhteşem. Sanki bir belgesel izliyormuşsunuz gibi.", rating: 5, date: "3 hafta önce" },
-        { id: 3, name: "Mehmet Demir", text: "Premium fiyata değer. Her bölüm ayrı bir keşif.", rating: 5, date: "1 ay önce" },
-        { id: 4, name: "Zeynep Öztürk", text: "Bu dersi aldıktan sonra diğer dersleri de almaya karar verdim. İçerik kalitesi gerçekten üst düzey.", rating: 5, date: "1 ay önce" },
-        { id: 5, name: "Can Aydın", text: "Akademik düzeyde bir içerik ama herkesin anlayabileceği bir dille anlatılmış. Harika!", rating: 5, date: "2 ay önce" },
-        { id: 6, name: "Selin Yıldız", text: "Dionysos bölümü favorim oldu. Bastırılmış kültürel kodları çözmek çok ilginçti.", rating: 4, date: "2 ay önce" },
-        { id: 7, name: "Burak Aksoy", text: "İş hayatında bile bu dersten öğrendiklerimi kullanıyorum. Perspektif kazandırıyor.", rating: 5, date: "3 ay önce" },
-        { id: 8, name: "Ayşe Çelik", text: "Titanlar ve Olimpikler bölümünü 3 kez izledim. Her seferinde yeni bir şey keşfettim.", rating: 5, date: "3 ay önce" },
-        { id: 9, name: "Emre Koç", text: "Felsefe ve mitoloji arasındaki bağlantıları çok güzel kurmuş. Tavsiye ederim.", rating: 5, date: "4 ay önce" },
-        { id: 10, name: "Deniz Şahin", text: "Olimpik İdeoloji bölümü dünya görüşümü değiştirdi diyebilirim.", rating: 5, date: "4 ay önce" },
-        { id: 11, name: "Gizem Arslan", text: "Çok akıcı bir anlatımı var. Saatlerin nasıl geçtiğini anlamıyorsunuz.", rating: 5, date: "5 ay önce" },
-        { id: 12, name: "Oğuz Yılmaz", text: "Eksen Çağı bölümü için bile bu ders alınır. Muhteşem içerik.", rating: 5, date: "5 ay önce" },
-    ],
-    relatedCourses: [
-        {
-            id: "mitolojiye-giris",
-            category: "Mitoloji",
-            title: "Mitolojiye Giriş",
-            description: "Kendini evrende konumlandırmak, 'neyim?', 'neden varım?' gibi sorulara cevap aramak...",
-            slug: "mitoloji/mitolojiye-giris",
-            price: 1250,
-        },
-        {
-            id: "psikolojiye-giris",
-            category: "Psikoloji",
-            title: "Psikolojiye Giriş",
-            description: "İnsan davranışının ve zihinsel süreçlerinin evrimsel ve sinirsel temelleri...",
-            slug: "psikoloji/psikolojiye-giris",
-            price: 1450,
-        },
-        {
-            id: "kapitalizm-tarihi",
-            category: "Siyaset Bilimi",
-            title: "Kapitalizmin Tarihi",
-            description: "Siyaset biliminin temel kavramlarını herkesin rahatça içselleştirebileceği şekilde...",
-            slug: "siyaset-bilimi/kapitalizm-tarihi",
-            price: 1350,
-        },
-    ],
-};
-
-const categoryColors: Record<string, string> = {
-    "Mitoloji": "bg-[#FFBC0B] text-black font-semibold",
-    "Psikoloji": "bg-purple-600 text-white font-semibold",
-    "Siyaset Bilimi": "bg-slate-700 text-white font-semibold",
-};
+import { getCourseBySlug, categoryColors } from "@/data/courses";
 
 export default function CoursePage() {
     const params = useParams();
     const [showAllTestimonials, setShowAllTestimonials] = useState(false);
     const [expandedChapter, setExpandedChapter] = useState<number | null>(null);
+
+    const courseData = getCourseBySlug(
+        params.kategori as string,
+        params.slug as string
+    );
+
+    if (!courseData) {
+        return (
+            <main className="min-h-screen bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)] flex items-center justify-center">
+                <FloatingHeader />
+                <div className="text-center">
+                    <h1 className="text-4xl font-bold mb-4">Ders Bulunamadı</h1>
+                    <p className="text-[var(--theme-text-secondary)] mb-6">Aradığınız ders mevcut değil.</p>
+                    <Link href="/" className="px-6 py-3 bg-[var(--theme-accent)] text-[var(--theme-accent-text)] rounded-xl font-semibold">
+                        Ana Sayfaya Dön
+                    </Link>
+                </div>
+            </main>
+        );
+    }
 
     const visibleTestimonials = showAllTestimonials
         ? courseData.testimonials
@@ -121,9 +55,9 @@ export default function CoursePage() {
                                 <video
                                     className="w-full h-full object-cover"
                                     controls
-                                    poster="/images/courses/tanrilarin-evrimi-cover.jpg"
+                                    poster={courseData.coverImage}
                                 >
-                                    <source src="/videos/tanrilarin-evrimi-tanitim.mp4" type="video/mp4" />
+                                    {courseData.videoSrc && <source src={courseData.videoSrc} type="video/mp4" />}
                                     Tarayıcınız video oynatmayı desteklemiyor.
                                 </video>
                             </div>
@@ -141,7 +75,7 @@ export default function CoursePage() {
                                         {courseData.seriesLessons.map((lesson, index) => (
                                             <div key={lesson.number} className="flex items-center">
                                                 <Link
-                                                    href={`/ders/mitoloji/${lesson.slug}`}
+                                                    href={`/ders/${courseData.categorySlug}/${lesson.slug}`}
                                                     className={`group relative px-4 py-2 text-sm font-medium rounded-xl transition-all ${lesson.number === courseData.currentLesson
                                                         ? 'bg-[var(--theme-accent)] text-[var(--theme-accent-text)]'
                                                         : 'text-[var(--theme-text-muted)] hover:text-[var(--theme-text-primary)] hover:bg-[var(--theme-bg-tertiary)]'
@@ -165,36 +99,233 @@ export default function CoursePage() {
                                     </div>
                                 </div>
                                 <h1 className="text-2xl sm:text-3xl font-bold mb-2">{courseData.title}</h1>
-                                <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                                    <p className="text-[var(--theme-text-secondary)] text-sm">{courseData.tagline}</p>
-                                    <span className="text-[var(--theme-text-muted)]">•</span>
-                                    <span className="flex items-center gap-1.5 text-sm text-[var(--theme-text-muted)]">
-                                        <Clock className="w-3.5 h-3.5 text-[var(--theme-accent)]" /> {courseData.duration}
-                                    </span>
-                                    <span className="flex items-center gap-1.5 text-sm text-[var(--theme-text-muted)]">
-                                        <Users className="w-3.5 h-3.5 text-[var(--theme-accent)]" /> {courseData.students.toLocaleString()}
-                                    </span>
-                                    <span className="flex items-center gap-1.5 text-sm text-[var(--theme-text-muted)]">
-                                        <Star className="w-3.5 h-3.5 text-[var(--flu-yellow)] fill-[var(--flu-yellow)]" /> {courseData.rating}
-                                    </span>
+                                <p className="text-[var(--theme-text-secondary)] text-sm">{courseData.tagline}</p>
+
+                                {/* Paket İçeriği - sadece bundledCourses varsa */}
+                                {courseData.bundledCourses && courseData.bundledCourses.length > 0 && (
+                                    <div className="mt-3 flex items-center gap-2 flex-wrap">
+                                        {courseData.bundledCourses.map((bc, idx) => (
+                                            <div key={idx} className="flex items-center gap-2">
+                                                {idx > 0 && <span className="text-[var(--theme-accent)] font-bold text-sm hidden sm:inline">+</span>}
+                                                <a
+                                                    href={`/ders/${bc.slug}`}
+                                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--theme-bg-card)] border border-[var(--theme-border)] hover:border-[var(--theme-accent)] hover:bg-[var(--theme-accent)]/5 transition-all text-sm font-medium text-[var(--theme-text-primary)]"
+                                                >
+                                                    <span className="w-4 h-4 rounded-full bg-[var(--theme-accent)] flex items-center justify-center text-[9px] font-bold text-[var(--theme-accent-text)]">{idx + 1}</span>
+                                                    {bc.title}
+                                                </a>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* MOBİL SATIN ALMA KARTI - sadece mobilde göster, bento grid üstünde */}
+                            <div className="lg:hidden bg-[var(--theme-bg-card)] backdrop-blur-sm rounded-2xl overflow-hidden border border-[var(--theme-border)]">
+                                <div className="aspect-video relative overflow-hidden">
+                                    <img src={courseData.coverImage} alt={courseData.title} className="w-full h-full object-cover" />
+                                </div>
+                                <div className="p-5">
+                                    <div className="flex justify-between gap-4 mb-4">
+                                        <div className="flex flex-col justify-between gap-1">
+                                            <span className="category-badge inline-block w-fit px-3 py-1 text-sm font-semibold rounded-lg">{courseData.category}</span>
+                                            <p className="text-xl font-bold text-[var(--theme-text-primary)]">{courseData.title}</p>
+                                        </div>
+                                        <div className="flex flex-col items-end justify-between gap-1">
+                                            <span className="text-3xl font-black text-[var(--theme-text-primary)]">₺{courseData.price.toLocaleString()}</span>
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-sm text-[var(--theme-text-muted)] line-through">₺{courseData.originalPrice.toLocaleString()}</span>
+                                                <span className="px-2 py-0.5 bg-[#F74A4A] text-white text-[10px] font-semibold rounded">%{courseData.discount} indirim</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col gap-3">
+                                        <button className="w-full py-3.5 bg-[var(--theme-accent)] text-[var(--theme-accent-text)] font-bold rounded-xl hover:opacity-90 transition-all flex items-center justify-center gap-2">
+                                            <Tag className="w-5 h-5" /> Hemen Al
+                                        </button>
+                                        <button className="w-full py-3 bg-[var(--theme-button-secondary-bg)] text-[var(--theme-text-primary)] font-medium rounded-xl hover:bg-[var(--theme-button-secondary-hover)] transition-colors flex items-center justify-center gap-2">
+                                            <ShoppingCart className="w-4 h-4" /> Sepete Ekle
+                                        </button>
+                                        <button className="w-full py-3 bg-transparent text-[var(--theme-text-secondary)] font-medium rounded-xl border-2 border-dashed border-[var(--theme-border)] hover:border-[var(--theme-accent)] hover:text-[var(--theme-accent)] hover:bg-[var(--theme-accent)]/5 transition-all flex items-center justify-center gap-2 group">
+                                            <Gift className="w-4 h-4 group-hover:scale-110 transition-transform" /> Hediye Et
+                                        </button>
+                                    </div>
+                                    <div className="mt-4 pt-4 border-t border-[var(--theme-border)] flex items-center justify-between text-sm">
+                                        <div className="flex items-center gap-1.5 text-[var(--theme-text-secondary)]">
+                                            <Clock className="w-4 h-4 text-[var(--theme-accent)]" />
+                                            <span>{courseData.duration}</span>
+                                        </div>
+                                        <div className="flex items-center gap-1.5 text-[var(--theme-text-secondary)]">
+                                            <Play className="w-4 h-4 text-[var(--theme-accent)]" />
+                                            <span>{courseData.chapters.length} Video</span>
+                                        </div>
+                                        <div className="flex items-center gap-1.5 text-[var(--theme-text-secondary)]">
+                                            <Users className="w-4 h-4 text-[var(--theme-accent)]" />
+                                            <span>{courseData.students.toLocaleString()}</span>
+                                        </div>
+                                        <div className="flex items-center gap-1.5 text-[var(--theme-text-secondary)]">
+                                            <Star className="w-4 h-4 text-[var(--theme-accent)]" />
+                                            <span>{courseData.rating}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            {/* Keşif Bölümü */}
-                            <div className="bg-[var(--theme-bg-card)] rounded-2xl p-5 border border-[var(--theme-border)]">
-                                <h2 className="text-lg font-bold mb-4">
-                                    Bu Derste <span className="text-[#F74A4A]">Ne Keşfedeceksiniz?</span>
-                                </h2>
-                                <div className="grid sm:grid-cols-3 gap-3">
-                                    {courseData.insights.map((insight, i) => (
-                                        <div
-                                            key={i}
-                                            className="p-3 bg-[var(--theme-bg-card)] rounded-xl border border-[var(--theme-border)] text-sm text-[var(--theme-text-secondary)]"
-                                        >
-                                            <span className="text-[var(--theme-accent)] font-bold mr-1">?</span>
-                                            {insight}
+                            {/* Bu Derste Neler Var? - Simplified Bento Grid */}
+                            <div className="bg-[var(--theme-bg-card)] rounded-3xl p-4 sm:p-6 border border-[var(--theme-border)]">
+                                {/* Section Header - Dual Color Style */}
+                                <div className="mb-5">
+                                    <div className="flex items-center gap-3 mb-2">
+                                        <div className="w-1.5 h-7 bg-gradient-to-b from-[#F74A4A] to-[#FF8C42] rounded-full" />
+                                        <h2 className="text-xl sm:text-2xl font-bold text-[var(--theme-text-primary)]">
+                                            Bu Derste <span className="text-[#F74A4A]">Neler Var?</span>
+                                        </h2>
+                                    </div>
+                                </div>
+
+                                {/* Simplified Bento Grid - 2x2 + Instructor Note */}
+                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                                    {/* ROW 1, COL 1: Video */}
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.1 }}
+                                        whileHover={{ scale: 1.03 }}
+                                        className="relative overflow-hidden rounded-2xl bg-[#22C55E] p-4 cursor-pointer"
+                                    >
+                                        <div className="flex items-center gap-1 mb-2">
+                                            <Play className="w-4 h-4 text-white/80" fill="white" />
+                                            <span className="text-white/80 text-xs font-medium">Video</span>
                                         </div>
-                                    ))}
+                                        <span className="text-4xl sm:text-5xl font-black text-white">8</span>
+                                        <p className="text-white/60 text-xs mt-1">Bölüm</p>
+                                        <div className="absolute -bottom-4 -right-4 w-16 h-16 bg-white/10 rounded-full" />
+                                    </motion.div>
+
+                                    {/* ROW 1, COL 2: Süre */}
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.15 }}
+                                        whileHover={{ scale: 1.03 }}
+                                        className="relative overflow-hidden rounded-2xl bg-[#8B5CF6] p-4 cursor-pointer"
+                                    >
+                                        <div className="flex items-center gap-1 mb-2">
+                                            <Clock className="w-4 h-4 text-white/80" />
+                                            <span className="text-white/80 text-xs font-medium">Süre</span>
+                                        </div>
+                                        <span className="text-4xl sm:text-5xl font-black text-white">12+</span>
+                                        <p className="text-white/60 text-xs mt-1">Saat İçerik</p>
+                                        <div className="absolute -bottom-4 -right-4 w-16 h-16 bg-white/10 rounded-full" />
+                                    </motion.div>
+
+                                    {/* ROW 1-2, COL 3-4: Course Thumbnail (2x2) */}
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.95 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        transition={{ delay: 0.2 }}
+                                        whileHover={{ scale: 1.02 }}
+                                        className="relative overflow-hidden rounded-2xl cursor-pointer group col-span-2 row-span-1 sm:row-span-2 order-first sm:order-none"
+                                    >
+                                        <img
+                                            src={courseData.coverImage}
+                                            alt={courseData.title}
+                                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                            style={{ minHeight: '200px' }}
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                                        <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
+                                            <span className={`inline-block text-xs font-bold px-2 py-1 rounded mb-2 ${categoryColors[courseData.category] || 'bg-[#FFBC0B] text-black'}`}>
+                                                {courseData.category.toUpperCase()}
+                                            </span>
+                                            <h3 className="text-white text-lg sm:text-xl font-bold leading-tight">
+                                                {courseData.title}
+                                            </h3>
+                                            <p className="text-white/70 text-xs mt-1">
+                                                {courseData.tagline}
+                                            </p>
+                                        </div>
+                                        <motion.div
+                                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 bg-white/90 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300"
+                                            whileHover={{ scale: 1.1 }}
+                                        >
+                                            <Play className="w-6 h-6 text-[#F74A4A] ml-1" fill="#F74A4A" />
+                                        </motion.div>
+                                    </motion.div>
+
+                                    {/* ROW 2, COL 1: Öğrenci */}
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.25 }}
+                                        whileHover={{ scale: 1.03 }}
+                                        className="relative overflow-hidden rounded-2xl bg-[#F59E0B] p-4 cursor-pointer"
+                                    >
+                                        <div className="flex items-center gap-1 mb-2">
+                                            <Users className="w-4 h-4 text-white/80" />
+                                            <span className="text-white/80 text-xs font-medium">Öğrenci</span>
+                                        </div>
+                                        <span className="text-3xl sm:text-4xl font-black text-white">2.8K</span>
+                                        <p className="text-white/60 text-xs mt-1">Katılımcı</p>
+                                        <div className="absolute -bottom-4 -right-4 w-16 h-16 bg-white/10 rounded-full" />
+                                    </motion.div>
+
+                                    {/* ROW 2, COL 2: Puan */}
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.3 }}
+                                        whileHover={{ scale: 1.03 }}
+                                        className="relative overflow-hidden rounded-2xl bg-white p-4 cursor-pointer"
+                                    >
+                                        <div className="flex items-center gap-1 mb-2">
+                                            <Star className="w-4 h-4 text-[#F59E0B]" fill="#F59E0B" />
+                                            <span className="text-gray-500 text-xs font-medium">Puan</span>
+                                        </div>
+                                        <span className="text-4xl sm:text-5xl font-black text-gray-900">4.9</span>
+                                        <p className="text-gray-500 text-xs mt-1">Mükemmel</p>
+                                    </motion.div>
+
+                                    {/* ROW 3: Full Width Instructor Note */}
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.35 }}
+                                        whileHover={{ scale: 1.01 }}
+                                        className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#1a1a2e] via-[#16213e] to-[#1a1a2e] border border-white/10 p-5 sm:p-6 col-span-2 sm:col-span-4"
+                                    >
+                                        <div className="absolute top-0 right-0 w-32 h-32 bg-[#F74A4A]/5 rounded-full blur-3xl" />
+
+                                        <div className="relative z-10 flex items-start gap-4">
+                                            {/* Instructor Avatar */}
+                                            <div className="flex-shrink-0 hidden sm:block">
+                                                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#F74A4A] to-[#FF8C42] p-0.5">
+                                                    <div className="w-full h-full rounded-full bg-[#1a1a2e] flex items-center justify-center">
+                                                        <span className="text-lg">✍️</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Note Content */}
+                                            <div className="flex-1">
+                                                <div className="flex items-center gap-2 mb-3">
+                                                    <span className="text-xs font-bold text-[#F74A4A] bg-[#F74A4A]/10 px-3 py-1 rounded-full">
+                                                        EĞİTMEN NOTU
+                                                    </span>
+                                                    <span className="text-white/40 text-xs">{courseData.instructor.name}</span>
+                                                </div>
+                                                <p className="text-white/90 text-sm sm:text-base leading-relaxed italic">
+                                                    "{courseData.instructorNote}"
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        {/* Decorative Quote Mark */}
+                                        <div className="absolute top-3 right-4 text-5xl font-serif text-white/5 select-none">
+                                            "
+                                        </div>
+                                    </motion.div>
+
                                 </div>
                             </div>
 
@@ -233,11 +364,57 @@ export default function CoursePage() {
                                                         initial={{ height: 0, opacity: 0 }}
                                                         animate={{ height: 'auto', opacity: 1 }}
                                                         exit={{ height: 0, opacity: 0 }}
-                                                        transition={{ duration: 0.2 }}
+                                                        transition={{ duration: 0.3 }}
                                                         className="overflow-hidden"
                                                     >
-                                                        <div className="p-4 ml-9 mt-1 bg-[var(--theme-bg-card)] rounded-xl border-l-2 border-[var(--theme-accent)]/30">
-                                                            <p className="text-sm text-[var(--theme-text-secondary)]">{chapter.description}</p>
+                                                        <div className="mt-3 ml-9 space-y-3">
+                                                            {/* İçerik Açıklaması - Üstte */}
+                                                            <p className="text-sm text-[var(--theme-text-secondary)] leading-relaxed">{chapter.description}</p>
+
+                                                            {/* Alt Konular */}
+                                                            {chapter.subChapters && chapter.subChapters.length > 0 && (
+                                                                <div className="space-y-1.5">
+                                                                    {chapter.subChapters.map((sub, idx) => (
+                                                                        <div key={idx} className="flex items-center justify-between py-1.5 px-3 rounded-lg bg-[var(--theme-bg-tertiary)]/50 border border-[var(--theme-border)]/50">
+                                                                            <div className="flex items-center gap-2">
+                                                                                <span className="w-5 h-5 rounded-md bg-[var(--theme-accent)]/10 flex items-center justify-center text-[10px] font-semibold text-[var(--theme-accent)]">{idx + 1}</span>
+                                                                                <span className="text-xs text-[var(--theme-text-secondary)]">{sub.title}</span>
+                                                                            </div>
+                                                                            <span className="text-[10px] text-[var(--theme-text-muted)]">{sub.duration}</span>
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            )}
+
+                                                            {/* Alt Satır: Video + Quiz */}
+                                                            <div className="grid grid-cols-2 gap-3">
+                                                                {/* Video Ders Kapağı */}
+                                                                <div className="relative aspect-video rounded-xl overflow-hidden bg-gradient-to-br from-[var(--theme-bg-tertiary)] to-[var(--theme-bg-card)] border border-[var(--theme-border)] group cursor-pointer">
+                                                                    <div className="absolute inset-0 flex items-center justify-center">
+                                                                        <div className="w-12 h-12 rounded-full bg-[var(--theme-accent)]/90 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
+                                                                            <Play className="w-5 h-5 text-[var(--theme-accent-text)] ml-0.5" fill="currentColor" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="absolute bottom-2 left-2 px-2 py-1 bg-black/60 rounded text-[10px] text-white font-medium">
+                                                                        Video Ders
+                                                                    </div>
+                                                                </div>
+
+                                                                {/* Kendini Test Et */}
+                                                                <div className="p-4 bg-gradient-to-br from-[var(--theme-accent)]/10 to-[var(--theme-accent)]/5 rounded-xl border border-[var(--theme-accent)]/20 flex flex-col justify-between">
+                                                                    <div>
+                                                                        <div className="flex items-center gap-2 mb-2">
+                                                                            <Brain className="w-4 h-4 text-[var(--theme-accent)]" />
+                                                                            <span className="text-xs font-semibold text-[var(--theme-accent)] uppercase tracking-wide">Quiz</span>
+                                                                        </div>
+                                                                        <p className="text-sm text-[var(--theme-text-secondary)] mb-3">Bu bölümde öğrendiklerini test et!</p>
+                                                                    </div>
+                                                                    <button className="w-full py-2.5 bg-[var(--theme-accent)] text-[var(--theme-accent-text)] text-sm font-semibold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+                                                                        <CheckCircle className="w-4 h-4" />
+                                                                        Kendini Test Et
+                                                                    </button>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </motion.div>
                                                 )}
@@ -309,15 +486,15 @@ export default function CoursePage() {
                             </div>
                         </div>
 
-                        {/* SAĞ SÜTUN - Sticky Satın Alma Kartı */}
-                        <div className="lg:w-1/3">
+                        {/* SAĞ SÜTUN - Sticky Satın Alma Kartı (sadece desktop) */}
+                        <div className="hidden lg:block lg:w-1/3">
                             <div className="lg:sticky lg:top-24 space-y-4">
                                 <div className="bg-[var(--theme-bg-card)] backdrop-blur-sm rounded-2xl overflow-hidden border border-[var(--theme-border)]">
                                     {/* 16:9 Ürün Görseli */}
                                     <div className="aspect-video relative overflow-hidden">
                                         <img
-                                            src="/images/courses/tanrilarin-evrimi-cover.jpg"
-                                            alt="Tanrıların Evrimi"
+                                            src={courseData.coverImage}
+                                            alt={courseData.title}
                                             className="w-full h-full object-cover"
                                         />
                                     </div>
@@ -347,13 +524,18 @@ export default function CoursePage() {
                                         </div>
 
 
-                                        <button className="w-full py-3.5 bg-[var(--theme-accent)] text-[var(--theme-accent-text)] font-bold rounded-xl hover:opacity-90 transition-all hover:scale-[1.02] active:scale-[0.98] mb-2 flex items-center justify-center gap-2">
-                                            <Tag className="w-5 h-5" />
-                                            Hemen Al
-                                        </button>
-                                        <button className="w-full py-3 bg-[var(--theme-button-secondary-bg)] text-[var(--theme-text-primary)] font-medium rounded-xl hover:bg-[var(--theme-button-secondary-hover)] transition-colors flex items-center justify-center gap-2">
-                                            <ShoppingCart className="w-4 h-4" /> Sepete Ekle
-                                        </button>
+                                        <div className="flex flex-col gap-3">
+                                            <button className="w-full py-3.5 bg-[var(--theme-accent)] text-[var(--theme-accent-text)] font-bold rounded-xl hover:opacity-90 transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2">
+                                                <Tag className="w-5 h-5" />
+                                                Hemen Al
+                                            </button>
+                                            <button className="w-full py-3 bg-[var(--theme-button-secondary-bg)] text-[var(--theme-text-primary)] font-medium rounded-xl hover:bg-[var(--theme-button-secondary-hover)] transition-colors flex items-center justify-center gap-2">
+                                                <ShoppingCart className="w-4 h-4" /> Sepete Ekle
+                                            </button>
+                                            <button className="w-full py-3 bg-transparent text-[var(--theme-text-secondary)] font-medium rounded-xl border-2 border-dashed border-[var(--theme-border)] hover:border-[var(--theme-accent)] hover:text-[var(--theme-accent)] hover:bg-[var(--theme-accent)]/5 transition-all flex items-center justify-center gap-2 group">
+                                                <Gift className="w-4 h-4 group-hover:scale-110 transition-transform" /> Hediye Et
+                                            </button>
+                                        </div>
 
                                         {/* Stats - 4 İnfografik, Tek Satır */}
                                         <div className="mt-4 pt-4 border-t border-[var(--theme-border)] flex items-center justify-between text-sm">
@@ -370,7 +552,7 @@ export default function CoursePage() {
                                                 <span>{courseData.students.toLocaleString()}</span>
                                             </div>
                                             <div className="flex items-center gap-1.5 text-[var(--theme-text-secondary)]">
-                                                <Star className="w-4 h-4 text-[var(--flu-yellow)] fill-[var(--flu-yellow)]" />
+                                                <Star className="w-4 h-4 text-[var(--theme-accent)]" />
                                                 <span>{courseData.rating}</span>
                                             </div>
                                         </div>
@@ -382,43 +564,74 @@ export default function CoursePage() {
                 </div>
             </div>
 
-            {/* İLGİLİ KURSLAR - Full width, sticky dışında */}
-            <section className="py-12 px-4 bg-[var(--theme-bg-secondary)] dark:bg-[var(--theme-bg-secondary)] light-mode-red-section">
+            {/* İLGİLİ KURSLAR - Premium Glassmorphism Kartlar */}
+            <section className="py-16 px-4 bg-gradient-to-b from-[var(--theme-bg-secondary)] to-[var(--theme-bg-primary)]">
                 <div className="max-w-7xl mx-auto">
-                    <h2 className="text-2xl font-bold mb-6">
+                    <motion.h2
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-2xl sm:text-3xl font-bold mb-8 text-center"
+                    >
                         Bu Dersi Satın Alanlar, <span className="text-[#F74A4A]">Bunlara da Göz Attı</span>
-                    </h2>
+                    </motion.h2>
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {courseData.relatedCourses.map((course) => (
-                            <Link
+                        {courseData.relatedCourses.map((course, index) => (
+                            <motion.div
                                 key={course.id}
-                                href={`/ders/${course.slug}`}
-                                className="group bg-[var(--theme-bg-card)] rounded-2xl overflow-hidden border border-[var(--theme-border)] hover:border-[var(--theme-accent)]/30 transition-all"
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: index * 0.1 }}
                             >
-                                {/* Course Image */}
-                                <div className="aspect-video bg-[var(--theme-bg-card-solid)] relative">
-                                    <div className="absolute inset-0 flex items-center justify-center opacity-50 group-hover:opacity-70 transition-opacity">
-                                        <Play className="w-12 h-12 text-[var(--theme-text-primary)]" />
-                                    </div>
-                                </div>
-
-                                {/* Content */}
-                                <div className="p-5">
-                                    <span className={`inline-block px-2.5 py-1 text-sm font-medium rounded-lg mb-3 ${categoryColors[course.category] || "bg-[var(--theme-button-secondary-bg)] text-[var(--theme-text-secondary)]"}`}>
-                                        {course.category}
-                                    </span>
-                                    <h3 className="text-lg font-semibold text-[var(--theme-text-primary)] group-hover:text-[var(--theme-accent)] transition-colors mb-2">
-                                        {course.title}
-                                    </h3>
-                                    <p className="text-sm text-[var(--theme-text-secondary)] line-clamp-2 mb-4">{course.description}</p>
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-xl font-bold text-[var(--theme-text-primary)]">₺{course.price.toLocaleString()}</span>
-                                        <span className="text-sm text-[var(--theme-accent)] flex items-center gap-1 group-hover:gap-2 transition-all font-medium">
-                                            İncele <ArrowRight className="w-4 h-4" />
+                                <Link
+                                    href={`/ders/${course.slug}`}
+                                    className="group block relative bg-[var(--theme-bg-card)]/80 backdrop-blur-xl rounded-2xl overflow-hidden border border-[var(--theme-border)] hover:border-[var(--theme-accent)]/50 transition-all duration-300 hover:shadow-2xl hover:shadow-[var(--theme-accent)]/10 hover:-translate-y-2"
+                                >
+                                    {/* Category Ribbon */}
+                                    <div className="absolute top-4 left-0 z-10">
+                                        <span className={`px-4 py-1.5 text-xs font-bold rounded-r-full shadow-lg ${categoryColors[course.category] || "bg-[var(--theme-button-secondary-bg)] text-[var(--theme-text-secondary)]"}`}>
+                                            {course.category}
                                         </span>
                                     </div>
-                                </div>
-                            </Link>
+
+                                    {/* Course Image with Gradient Overlay */}
+                                    <div className="aspect-video bg-gradient-to-br from-[var(--theme-bg-tertiary)] to-[var(--theme-bg-card)] relative overflow-hidden">
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                                        <div className="absolute inset-0 flex items-center justify-center">
+                                            <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 group-hover:bg-[var(--theme-accent)] transition-all duration-300">
+                                                <Play className="w-7 h-7 text-white ml-1" fill="currentColor" />
+                                            </div>
+                                        </div>
+                                        {/* Fake Progress Bar */}
+                                        <div className="absolute bottom-0 left-0 right-0 h-1 bg-black/30">
+                                            <div className="h-full bg-[var(--theme-accent)] w-0 group-hover:w-1/4 transition-all duration-500" />
+                                        </div>
+                                    </div>
+
+                                    {/* Content */}
+                                    <div className="p-5">
+                                        <h3 className="text-lg font-bold text-[var(--theme-text-primary)] group-hover:text-[var(--theme-accent)] transition-colors mb-2">
+                                            {course.title}
+                                        </h3>
+                                        <p className="text-sm text-[var(--theme-text-secondary)] line-clamp-2 mb-4">{course.description}</p>
+
+                                        {/* Footer */}
+                                        <div className="flex items-center justify-between pt-3 border-t border-[var(--theme-border)]">
+                                            <div className="flex flex-col">
+                                                <span className="text-xs text-[var(--theme-text-muted)]">Başlangıç Fiyatı</span>
+                                                <span className="text-xl font-black text-[var(--theme-text-primary)]">₺{course.price.toLocaleString()}</span>
+                                            </div>
+                                            <div className="flex items-center gap-2 text-sm text-[var(--theme-accent)] font-semibold group-hover:gap-3 transition-all">
+                                                Keşfet <ArrowRight className="w-4 h-4" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Hover glow effect */}
+                                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none bg-gradient-to-t from-[var(--theme-accent)]/5 to-transparent" />
+                                </Link>
+                            </motion.div>
                         ))}
                     </div>
                 </div>

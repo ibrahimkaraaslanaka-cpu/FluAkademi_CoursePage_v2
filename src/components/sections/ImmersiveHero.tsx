@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { Play, Sparkles, ArrowRight, Volume2, VolumeX } from "lucide-react";
+import LightRays from "@/components/effects/LightRays";
 
 const heroSlides = [
     {
@@ -117,6 +118,24 @@ export default function ImmersiveHero() {
                     ],
                 }}
             />
+
+            {/* Light Rays — WebGL overlay */}
+            <div className="absolute inset-0 z-[5]" style={{ width: "100%", height: "100%" }}>
+                <LightRays
+                    raysOrigin="top-center"
+                    raysColor={slide.color}
+                    raysSpeed={1}
+                    lightSpread={1.2}
+                    rayLength={3}
+                    followMouse={true}
+                    mouseInfluence={0.1}
+                    noiseAmount={0}
+                    distortion={0}
+                    pulsating={false}
+                    fadeDistance={1}
+                    saturation={1}
+                />
+            </div>
 
             {/* Content */}
             <div className="relative z-10 h-full flex items-center">
