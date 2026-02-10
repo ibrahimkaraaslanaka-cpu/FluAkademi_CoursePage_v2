@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         course.description ||
         `${course.title}: ${course.category} alanında Flu Akademi online dersi. ${course.instructor} tarafından hazırlanmıştır.`;
 
-    const image = course.coverImage || course.thumbnail;
+    const image = course.coverImage;
 
     return {
         title,
